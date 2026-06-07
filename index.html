@@ -391,7 +391,6 @@
                 <button id="tab-btn-routes" class="tab-btn active" onclick="switchTab('routes')">Routes</button>
                 <button id="tab-btn-hangar" class="tab-btn" onclick="switchTab('hangar')">Hangar</button>
                 <button id="tab-btn-market" class="tab-btn" onclick="switchTab('market')">Market</button>
-                <button id="tab-btn-cargo" class="tab-btn" onclick="switchTab('legacy')" style="color:var(--cargo-color)">Legacy</button>
                 <button id="tab-btn-cargo" class="tab-btn" onclick="switchTab('cargo')" style="color:var(--cargo-color)">Cargo</button>
                 <button id="tab-btn-regions" class="tab-btn" onclick="switchTab('regions')">Regions</button>
                 <button id="tab-btn-achievements" class="tab-btn" onclick="switchTab('achievements')">Achieve</button>
@@ -429,10 +428,7 @@
             <div id="cargo" class="tab-content">
                 <h3 style="color:var(--cargo-color)">📦 Cargo Operations</h3>
                 <div id="cargo-locked-banner" class="rank-locked-banner" style="display:none;">
-                    🔒 Cargo aircraft unlock at <strong>Rank 10</strong>.
-                </div>
-              <div id="legacy-locked-banner" class="rank-locked-banner" style="display:none;">
-                    🔒 Legacy aircraft unlock at <strong>Rank 15</strong>.
+                    🔒 Cargo operations unlock at <strong>Rank 10</strong>. Additional airframes unlock at Ranks 11, 12, 13, 14.
                 </div>
                 <p id="cargo-subtitle" style="font-size:11px; color:#94a3b8; margin-bottom:5px; font-style:italic; display:none;">Specialized freighter aircraft for high-value cargo contracts.</p>
                 <div id="cargo-grid" class="market-grid"></div>
@@ -750,7 +746,7 @@
             },
             "Russia": { unlocked: false, baseCost: 75, continent: "Europe", nation: "Russia", flag: "🇷🇺", isSplit: false,
                 polygon: [
-                    [[69,31],[60,28],[55,28],[50,40],[51,50],[54,60],[51,80],[52,100],[53,120],[48,134],[43,131],[42.3,130.6],[43,132],[50,140],[60,160],[65,170],[66,179],[70,170],[75,140],[75,50],[69,31]],
+                    [[69,31],[60,28],[55,28],[50,40],[51,50],[54,60],[51,80],[52,100],[49.5,115],[52,120],[53,120],[53,120],[48,134],[43,131],[42.3,130.6],[43,132],[50,140],[60,160],[65,170],[66,179],[70,170],[75,140],[75,50],[69,31]],
                     [[55.3,21.0],[54.3,22.8],[54.4,19.6],[55.3,21.0]] // Kaliningrad
                 ],
                 airports: [
@@ -769,7 +765,7 @@
                 ]
             },
             "China": { unlocked: false, baseCost: 58, continent: "Asia", nation: "China", flag: "🇨🇳", isSplit: false,
-                polygon: [[53,120],[48,134],[43,131],[42,130],[39,124],[34,119],[30,122],[22,114],[20,110],[21,100],[24,97],[27.8,88.2],[31,78],[33.85,74.5],[37.0,74.5],[40,73],[45,90],[42,105],[46,120],[49.5,115],[52,100],[53,120]],
+                polygon: [[53,120],[48,134],[43,131],[42,130],[39,124],[34,119],[30,122],[22,114],[20,110],[21,100],[24,97],[27.8,88.2],[31,78],[33.85,74.5],[37.0,74.5],[40,73],[45,90],[42,105],[46,120],[49.5,115],[52,120],[53,120]],
                 airports: [
                     { name: "Beijing Capital (PEK)", lat: 40.0799, lng: 116.6031, isHub: false, baseDemand: 99, type: "airport" },
                     { name: "Shanghai Pudong (PVG)", lat: 31.1443, lng: 121.8083, isHub: false, baseDemand: 98, type: "airport", isCoastal: true },
@@ -2188,27 +2184,6 @@
                         <div style="font-size:11px;color:${gameState.cash>=plane.price?'var(--money-color)':'#ef4444'};">$${plane.price.toLocaleString()}</div>
                         ${gameState.rank < plane.minRank ? `<div style="font-size:9px;color:#ef4444;">Rank ${plane.minRank}</div>` : ''}`;
                     cargoGrid.appendChild(item);
-                });
-            }
-          // legacy market
-            const legacyGrid = document.getElementById('legacy-grid');
-            legacyGrid.innerHTML = '';
-            const legacyUnlocked = gameState.rank >= 15;
-            document.getElementById('legacy-locked-banner').style.display = legacyUnlocked ? 'none' : 'block';
-            document.getElementById('legacy-subtitle').style.display = legacyUnlocked ? 'block' : 'none';
-
-            if (legacyUnlocked) {
-                Object.entries(legacyCatalog).sort((a, b) => a[1].price - b[1].price).forEach(([id, plane]) => {
-                    const item = document.createElement('div'); item.className = 'market-item legacy-item';
-                    if (gameState.rank < plane.minRank) item.classList.add('locked');
-                    item.onclick = () => openMarketModal(id, true);
-                    item.innerHTML = `
-                        <div class="market-item-img" style="background-image:url('${plane.img}')"></div>
-                        <div style="font-size:11px;font-weight:bold;margin-bottom:2px;color:var(--legacy-color);">📦 ${plane.name}</div>
-                        <div style="font-size:10px;color:#94a3b8;margin-bottom:3px;">${plane.legacy?.toLocaleString()}kg</div>
-                        <div style="font-size:11px;color:${gameState.cash>=plane.price?'var(--money-color)':'#ef4444'};">$${plane.price.toLocaleString()}</div>
-                        ${gameState.rank < plane.minRank ? `<div style="font-size:9px;color:#ef4444;">Rank ${plane.minRank}</div>` : ''}`;
-                    legacyGrid.appendChild(item);
                 });
             }
 
